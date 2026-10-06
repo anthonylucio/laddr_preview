@@ -12,7 +12,18 @@
 </style>
 </head>
 <body>
-<div id="app" class="app"></div>
+<div id="app" class="app">
+    <header class="topbar"><div class="brand"><span class="brandmark"></span><span class="serif">Ladd_r</span></div></header>
+    <main class="landing">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Discover what’s missing.</div>
+          <h1>Less searching.<br>More moving.</h1>
+          <p>Ladd_r is loading your interactive preview.</p>
+        </div>
+      </section>
+    </main>
+  </div>
 <script>
 const seed={plan:'core',credits:5,user:{name:'Alex',roles:['Full Stack Developer','Software Engineer'],location:'Remote / California',salary:'$95k+'},jobs:[
 {id:1,title:'Full Stack Developer',company:'Northstar Labs',salary:'$110k–$135k',location:'Remote',match:94,why:'Strong React, Node and API alignment. Your current Full Stack résumé already fits this role.',resume:'Full Stack v2',status:'Suggested'},
@@ -23,7 +34,13 @@ const seed={plan:'core',credits:5,user:{name:'Alex',roles:['Full Stack Developer
 applications:[{company:'Nimbus',role:'Full Stack Engineer',status:'Interview',date:'Oct 1'},{company:'Cedar AI',role:'Software Engineer',status:'Applied',date:'Sep 29'},{company:'Arcade Health',role:'Frontend Engineer',status:'Follow-up',date:'Sep 25'}],
 resumes:[{name:'Master résumé',focus:'General full stack',updated:'Oct 1'},{name:'Full Stack v2',focus:'React + Node + APIs',updated:'Oct 4'},{name:'Backend/API',focus:'Node + systems',updated:'Sep 28'}],
 experiences:[{title:'Handled launch-day scope change',text:'Rebuilt a release checklist and coordinated engineering, product, and support after requirements changed three days before launch.',star:'Adaptability · cross-functional coordination'}]};
-let state=JSON.parse(localStorage.getItem('laddrState')||'null')||structuredClone(seed);function save(){localStorage.setItem('laddrState',JSON.stringify(state))}
+function cloneSeed(){return JSON.parse(JSON.stringify(seed))}
+let state=cloneSeed();
+try{
+  const stored=localStorage.getItem('laddrState');
+  if(stored) state=JSON.parse(stored);
+}catch(e){state=cloneSeed()}
+function save(){try{localStorage.setItem('laddrState',JSON.stringify(state))}catch(e){}}
 const $=s=>document.querySelector(s);const app=$('#app');
 function brand(){return `<div class="brand"><span class="brandmark"></span><span class="serif">Ladd_r</span></div>`}
 function top(){return `<header class="topbar">${brand()}<nav class="navlinks"><button class="desk" onclick="go('landing')">Home</button><button class="desk" onclick="go('pricing')">Pricing</button><button class="desk" onclick="go('dashboard')">Demo</button><button class="btn primary" onclick="go('dashboard')">Open Ladd_r</button></nav></header>`}
@@ -50,7 +67,19 @@ function addExperience(){const t=$('#expTitle').value.trim(),x=$('#expText').val
 function setPlan(p){state.plan=p;if(p==='core'&&state.credits<5)state.credits=5;if(p==='grow'&&state.credits<5)state.credits=5;save();toast(`Demo plan changed to ${p}.`);go('dashboard')}
 function addCredits(n){state.credits+=n;save();toast(`Added ${n} demo résumé credit${n>1?'s':''}.`)}
 function toast(msg){const d=document.createElement('div');d.className='toast';d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
-function go(page){location.hash=page;render()}function render(){const p=(location.hash||'#landing').slice(1);const f={landing,pricing,dashboard,matches,applications,resumes,interview,grow,diary}[p]||landing;app.innerHTML=f();window.scrollTo(0,0)}window.addEventListener('hashchange',render);render();
+function go(page){location.hash=page;render()}
+function render(){
+  try{
+    const p=(location.hash||'#landing').slice(1);
+    const view={landing,pricing,dashboard,matches,applications,resumes,interview,grow,diary}[p]||landing;
+    app.innerHTML=view();
+    window.scrollTo(0,0);
+  }catch(err){
+    app.innerHTML='<main class="landing"><section class="section"><div class="card coral"><h1>Ladd_r preview hit a loading error.</h1><p>Please refresh this page. If it persists, the preview will show this message instead of a blank screen while we fix it.</p><pre style="white-space:pre-wrap">'+String(err)+'</pre></div></section></main>';
+  }
+}
+window.addEventListener('hashchange',render);
+render();
 </script>
 </body>
 </html>
