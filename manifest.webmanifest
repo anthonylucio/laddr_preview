@@ -1,0 +1,11 @@
+{
+  "name": "Ladd_r",
+  "short_name": "Ladd_r",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffaf3",
+  "theme_color": "#ff6b57",
+  "icons": [
+    {"src":"assets/mascot-main.png","sizes":"1254x1254","type":"image/png","purpose":"any maskable"}
+  ]
+}
