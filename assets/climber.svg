@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 410" role="img" aria-label="A happy mint-colored one-eyed monster climbing a gold ladder">
+<defs><filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="4" dy="5" stdDeviation="0" flood-color="#101010"/></filter></defs>
+<g stroke="#141414" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<g fill="#ffc629" filter="url(#shadow)"><path d="M198 11 L219 11 L238 394 L216 394 Z"/><path d="M280 10 L302 10 L317 393 L295 393 Z"/><path d="M207 68 L300 65 L302 80 L208 83 Z"/><path d="M212 130 L304 129 L305 145 L213 145 Z"/><path d="M215 196 L306 191 L308 207 L216 213 Z"/><path d="M219 264 L311 258 L313 274 L220 280 Z"/><path d="M224 328 L314 322 L315 337 L225 342 Z"/></g>
+<g fill="#36cdbb" filter="url(#shadow)"><path d="M82 152 Q68 144 67 124 Q82 134 90 126 Q85 113 100 97 Q104 121 115 114 Q119 95 136 96 Q140 124 151 122 Q173 115 192 143 Q206 171 193 197 Q207 218 199 251 Q190 286 153 293 Q123 302 95 285 Q60 269 56 234 Q42 197 63 173 Z"/><path d="M90 271 L86 328 Q74 345 54 347 Q37 342 46 329 L66 311 L69 266 Z"/><path d="M159 267 L171 316 Q196 321 196 338 Q191 354 173 348 L145 335 L130 278 Z"/><path d="M184 185 Q212 179 229 159 Q243 161 243 177 Q215 207 188 212 Z"/><path d="M81 183 Q59 188 44 215 Q31 227 18 211 Q18 196 44 175 Q61 158 84 159 Z"/></g>
+<g><rect x="151" y="185" width="62" height="78" rx="17" fill="#ffc629" transform="rotate(8 177 216)"/></g>
+<ellipse cx="127" cy="182" rx="49" ry="51" fill="#fffefa"/><ellipse cx="140" cy="184" rx="19" ry="23" fill="#141414" stroke="none"/><ellipse cx="147" cy="173" rx="6" ry="8" fill="#fffefa" stroke="none"/>
+<path d="M109 250 Q133 269 151 244" stroke="#141414" fill="none"/>
+<g stroke="#141414" stroke-width="4"><path d="M52 363 l-9 8 M74 372 l-3 12 M97 368 l6 12" fill="none"/></g>
+</g></svg>
