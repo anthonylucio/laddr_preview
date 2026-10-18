@@ -16,7 +16,7 @@ var demoJobs=[
 {title:"Customer Success Specialist",category:"Operations",salary:[54000,78000],skills:["customer","communication","training","crm","reporting"],duties:["support","relationship","retention"],level:["specialist","coordinator"],why:"Client onboarding and relationship management"},
 {title:"Business Analyst",category:"Data",salary:[76000,105000],skills:["excel","sql","requirements","stakeholder","process"],duties:["analysis","process","data"],level:["analyst","specialist"],why:"Requirements and process analysis"}
 ];
-var F={step:0,name:"",email:"",resume:"",filename:"",role:"",salary:"65000",arrangement:"Remote",location:"",priority:"Qualified matches",notes:"",results:[],selected:null,packet:null};
+var F={step:0,name:"",email:"",resume:"",filename:"",role:"",salary:"65000",arrangement:"Remote",location:"",priority:"Qualified matches",notes:"",results:[],selected:null,packet:null,mode:"sample"};
 try{var previous=sessionStorage.getItem("laddr-onboard-draft");if(previous)F=Object.assign(F,JSON.parse(previous));}catch(e){}
 function save(){try{sessionStorage.setItem("laddr-onboard-draft",JSON.stringify(F));}catch(e){}}
 function esc(x){return String(x==null?"":x).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]});}
@@ -55,7 +55,7 @@ function error(msg){var el=flow.querySelector(".flow-warning");if(!el){el=docume
 window.laddrBegin=function(){F.step=0;save();render();};
 window.laddrClose=function(){flow.style.display="none";};
 window.laddrBack=function(){persistFields();F.step=Math.max(0,F.step-1);save();render();};
-window.laddrNext=function(){persistFields();if(F.step===0&&!F.name){error("What should we call you?");return;}if(F.step===1&&F.resume.length<80){error("Please add at least a short résumé (80+ characters) so the matching has evidence to work with.");return;}if(F.step===2&&!F.role){error("Add a role or professional direction to continue.");return;}if(F.step===3&&(!F.salary||Number(F.salary)<0)){error("Enter a minimum salary, or use 0 if you're flexible.");return;}if(F.step===4&&!F.location){error("Please enter a location or eligibility region.");return;}if(F.step===5){analyze();}F.step=Math.min(6,F.step+1);save();render();};
+window.laddrNext=function(){persistFields();if(F.step===0&&!F.name){error("What should we call you?");return;}if(F.step===1&&F.resume.length<80){error("Please add at least a short résumé (80+ characters) so the matching has evidence to work with.");return;}if(F.step===2&&!F.role){error("Add a role or professional direction to continue.");return;}if(F.step===3&&(!F.salary||Number(F.salary)<0)){error("Enter a minimum salary, or use 0 if you're flexible.");return;}if(F.step===4&&!F.location){error("Please enter a location or eligibility region.");return;}if(F.step===5){analyze();F.step=6;save();render();searchLive();return;}F.step=Math.min(6,F.step+1);save();render();};
 window.laddrArrangement=function(x){F.arrangement=x;save();render();};
 window.laddrPriority=function(x){F.priority=x;save();render();};
 window.laddrFile=async function(file){if(!file)return;var msg=document.getElementById("ld-filemsg");F.filename=file.name;msg.textContent="Reading "+file.name+"…";try{
@@ -71,10 +71,34 @@ function loadScript(src){return new Promise(function(ok,fail){var s=document.cre
 function analyze(){var matches=demoJobs.map(evaluate);var c=category(F.role);
 matches.sort(function(a,b){return (b.category===c?20:0)+b.score-((a.category===c?20:0)+a.score);});
 var floor=Number(F.salary)||0;var eligible=matches.filter(function(j){return j.salary[1]>=floor;});
-F.results=(eligible.length?eligible:matches).slice(0,5);F.selected=F.results[0]||null;F.packet=null;}
+F.results=(eligible.length?eligible:matches).slice(0,5);F.selected=F.results[0]||null;F.packet=null;F.mode="sample";}
+
+async function searchLive(){
+ var cfg=window.LADDR_RUNTIME||{};
+ if(!cfg.apiUrl||typeof cfg.getAccessToken!=="function")return;
+ var token;try{token=await cfg.getAccessToken();}catch(e){return;}
+ if(!token)return;
+ try{
+  var r=await fetch(cfg.apiUrl+"/api/search",{method:"POST",
+   headers:{"authorization":"Bearer "+token,"content-type":"application/json"},
+   body:JSON.stringify({resume:F.resume,role:F.role,location:F.location,arrangement:F.arrangement,min_salary:Number(F.salary)||0})});
+  if(!r.ok)throw new Error("Live search unavailable");
+  var data=await r.json(),jobs=Array.isArray(data.jobs)?data.jobs:[];
+  var mapped=jobs.filter(function(j){return /^https:\/\//.test(j.url||"");}).slice(0,5).map(function(j){
+   return {title:String(j.title||""),company:String(j.company||""),category:category(j.title||F.role),
+    salary:[Number(j.salary_min)||0,Number(j.salary_max)||0],
+    url:j.url,skills:Array.isArray(j.required_skills)?j.required_skills.slice(0,12):[],
+    duties:[String(j.summary||"").slice(0,150)],level:["specialist","analyst","coordinator","manager","engineer","developer"],
+    description:String(j.summary||""),reason:String(j.summary||"")};
+  });
+  if(!mapped.length)return;
+  F.results=mapped.map(evaluate);F.selected=F.results[0];F.mode="live";F.packet=null;save();
+  if(F.step===6&&flow.style.display==="flex")render();
+ }catch(e){/* The offline demo remains available if live research fails. */}
+}
 function roleScore(j){return '<div class="flow-score">'+j.score+'% aligned</div>';}
 function resultView(){if(!F.results||!F.results.length)analyze();var top=F.results[0],best=top.score;
-var answer='<div class="flow-eyebrow">Your first Ladd_r report · Sample jobs</div><h1 class="flow-h1">'+esc(F.name)+', here’s where you stand.</h1><p class="flow-sub">These are illustrative job families and salary bands—not verified live vacancies. The readiness values below are computed from your résumé text and these sample requirements. They are not hiring probabilities.</p><div class="flow-review"><div class="flow-chip"><span class="flow-small">Best sample alignment</span><b>'+best+'%</b></div><div class="flow-chip"><span class="flow-small">Roles reviewed</span><b>'+F.results.length+'</b></div><div class="flow-chip"><span class="flow-small">Your salary floor</span><b>'+currency(Number(F.salary)||0)+'</b></div></div><div class="flow-outcome" style="margin-top:22px"><div><h2 style="font-family:Georgia,serif">Your five sample matches</h2>';
+var answer='<div class="flow-eyebrow">Your first Ladd_r report · '+(F.mode==='live'?'Web research':'Sample jobs')+'</div><h1 class="flow-h1">'+esc(F.name)+', here’s where you stand.</h1><p class="flow-sub">'+(F.mode==='live'?'These results come from web research: confirm details and openings at the employer link.':'These are illustrative job families and salary bands—not verified live vacancies.')+' The readiness values below are computed from your résumé text and these sample requirements. They are not hiring probabilities.</p><div class="flow-review"><div class="flow-chip"><span class="flow-small">Best sample alignment</span><b>'+best+'%</b></div><div class="flow-chip"><span class="flow-small">Roles reviewed</span><b>'+F.results.length+'</b></div><div class="flow-chip"><span class="flow-small">Your salary floor</span><b>'+currency(Number(F.salary)||0)+'</b></div></div><div class="flow-outcome" style="margin-top:22px"><div><h2 style="font-family:Georgia,serif">Your five sample matches</h2>';
 F.results.forEach(function(j,i){answer+='<div class="flow-job"><div class="flow-jobhead"><div><div class="flow-eyebrow">Role '+(i+1)+' · '+j.category+'</div><h3>'+esc(j.title)+'</h3></div>'+roleScore(j)+'</div><span class="flow-tag">'+currency(j.salary[0])+'–'+currency(j.salary[1])+' illustrative</span><span class="flow-tag">'+esc(F.arrangement)+' preference (not verified)</span><p class="flow-small">'+esc(j.reason)+'</p><div><b style="font-size:12px">Evidence found:</b> '+(j.matched.length?j.matched.map(function(x){return '<span class="flow-tag good">'+esc(x)+'</span>';}).join(""):'<span class="flow-tag">Insufficient evidence</span>')+'</div><div style="margin-top:8px"><b style="font-size:12px">Not demonstrated:</b> '+(j.missing.length?j.missing.map(function(x){return '<span class="flow-tag warm">'+esc(x)+'</span>';}).join(""):'None of these sample key skills')+'</div><div class="flow-actions"><button class="flow-btn '+(F.selected&&F.selected.title===j.title?'gold':'')+'" onclick="laddrSelect('+i+')">Choose this role</button></div></div>';});
 answer+='</div><aside class="flow-rail"><div class="flow-eyebrow">Readiness explained</div><h2 style="font-family:Georgia,serif;font-size:29px;margin:6px 0">What’s missing?</h2><p class="flow-small">40% qualification evidence · 20% experience · 15% seniority · 15% duty alignment · 10% accomplishment evidence.</p><div class="flow-ready-meter"><span style="width:'+best+'%"></span></div><p class="flow-small">Missing résumé evidence is not the same thing as missing ability. Ladd_r should ask before recommending a new certificate.</p><div class="flow-rule"></div><h3 style="font-family:Georgia,serif">Prepare one application</h3><p class="flow-small">Choose a role to create a truthful sample résumé summary and cover-letter draft using your own résumé text.</p><button class="flow-btn dark" onclick="laddrPacket()">Prepare my packet →</button><div class="flow-rule"></div><div class="flow-alert"><b>Live search will require a secure backend.</b><br>Real OpenAI web research, source links, and job verification will be activated after connecting the API. No API key is stored in this site.</div><div class="flow-actions"><button class="flow-btn" onclick="laddrRestart()">Edit my profile</button><button class="flow-btn" onclick="laddrWorkspace()">Open my workspace</button></div></aside></div>';
 if(F.packet)answer+=packetView();
