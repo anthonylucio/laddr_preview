@@ -63,6 +63,18 @@ window.changeStatus=function(i,v){state.apps[i].status=v;save();toast("Status up
 window.tailor=function(){if(state.credits<1){toast("No résumé credits left");return;}state.credits--;state.resumes.push({name:"New tailored résumé",focus:"Role-specific emphasis"});save();toast("Tailored résumé created");route("resumes");};
 window.feedback=function(){var a=document.getElementById("answer").value.trim();document.getElementById("feedback").innerHTML='<div class="notice" style="margin-top:14px"><b>'+(a?"Good raw material.":"Start with one real example.")+'</b><p>'+(a?"Make your action unmistakably yours, then add a concrete result if you actually know it. Do not invent a metric.":"Specific and true beats impressive and vague.")+'</p></div>';};
 window.saveExp=function(){var t=document.getElementById("expTitle").value.trim(),x=document.getElementById("expText").value.trim();if(!t||!x){toast("Add a title and description");return;}state.experiences.unshift({title:t,text:x,story:"New story · needs result"});save();toast("Experience saved");route("diary");};
+window.applyProfileFromOnboarding=function(d){
+state.name=String(d.name||"Friend").slice(0,60);
+state.jobs=(d.results||[]).map(function(j,i){return {
+id:900+i,title:j.title,company:"Illustrative role · not a live opening",
+salary:"$"+Math.round(j.salary[0]/1000)+"K–$"+Math.round(j.salary[1]/1000)+"K (sample)",
+work:(d.arrangement||"Flexible")+" preferred · eligibility unverified",
+match:j.score,status:"Suggested",resume:"Uploaded résumé",
+why:j.reason
+};});
+state.apps=[];
+state.resumes=[{name:"Uploaded résumé",focus:"Imported career history (demo)"}];
+save();route("home");};
 window.toast=toast;
 if(location.hash.indexOf("#app-")===0){route(location.hash.replace("#app-",""));} 
 })();
