@@ -1,0 +1,49 @@
+
+/* Ladd_r first-run onboarding */
+.flow-backdrop{position:fixed;inset:0;background:rgba(10,17,18,.69);z-index:200;overflow:auto;padding:30px 15px;display:flex;align-items:flex-start;justify-content:center}
+.flow-shell{position:relative;width:min(100%,980px);margin:auto;background:#fffaf3;border:2px solid #141414;border-radius:28px;box-shadow:13px 13px 0 rgba(0,0,0,.27);overflow:hidden;color:#151515}
+.flow-top{background:#ffe5dc;border-bottom:2px solid #151515;min-height:72px;display:flex;align-items:center;justify-content:space-between;padding:16px 26px;gap:16px}
+.flow-wordmark{font-family:Georgia,serif;font-weight:900;font-size:30px;letter-spacing:-2px}.flow-wordmark span{color:#ff6b57}
+.flow-close{border:2px solid #151515;background:#fffaf3;border-radius:50%;width:40px;height:40px;font-size:25px;line-height:1}
+.flow-progress{height:7px;background:#f0e9dc}.flow-progress span{height:100%;background:#46e0c6;display:block;transition:width .25s ease}
+.flow-body{padding:clamp(22px,4.5vw,48px)}
+.flow-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:32px;align-items:center}
+.flow-art{min-height:320px;border-radius:30px;background:linear-gradient(145deg,#d9faf1 0%,#d9faf1 56%,#ffc629 56%,#ffc629 70%,#ffe5dc 70%);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.flow-art .flow-monster{font-size:148px;filter:drop-shadow(6px 9px 0 rgba(0,0,0,.12))}
+.flow-art .flow-note{position:absolute;left:18px;bottom:16px;background:#fffaf3;border:2px solid #141414;transform:rotate(-3deg);padding:10px 14px;border-radius:14px;font-size:12px;font-weight:900}
+.flow-eyebrow{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin:0 0 10px}
+.flow-h1{font-family:Georgia,serif;font-size:clamp(37px,4.5vw,60px);line-height:.99;letter-spacing:-.05em;margin:8px 0 16px}
+.flow-sub{font-size:16px;color:#515953;line-height:1.6;margin:0 0 18px}
+.flow-input,.flow-select,.flow-textarea{width:100%;border:2px solid #151515;border-radius:13px;padding:13px;background:white;font-size:16px;min-height:50px}
+.flow-textarea{min-height:130px;resize:vertical}
+.flow-field{margin:0 0 15px}.flow-field label{display:block;font-size:13px;font-weight:850;margin-bottom:7px}
+.flow-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;align-items:center}
+.flow-btn{border:2px solid #151515;border-radius:999px;padding:13px 20px;background:#fffaf3;font-weight:850;font-size:15px;cursor:pointer}
+.flow-btn.dark{background:#151515;color:#fff}.flow-btn.gold{background:#ffc629}.flow-btn:disabled{opacity:.5;cursor:not-allowed}
+.flow-small{font-size:12px;color:#646a66;line-height:1.5}
+.flow-drop{border:2px dashed #151515;border-radius:20px;background:#dff9f2;padding:23px;text-align:center}
+.flow-drop input{width:100%;max-width:320px}
+.flow-answer{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.flow-choice{border:2px solid #141414;border-radius:15px;text-align:left;padding:14px;background:white;cursor:pointer;font-weight:800}
+.flow-choice.selected{background:#ffc629;box-shadow:3px 3px 0 #151515}
+.flow-chat{background:#f4eee3;border:1px solid #e0d7ca;padding:18px;border-radius:19px;margin:12px 0 20px;display:flex;gap:13px;align-items:center}
+.flow-face{width:53px;height:53px;border-radius:45%;background:#46e0c6;border:2px solid #151515;display:grid;place-items:center;font-size:26px;flex:none}
+.flow-review{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.flow-chip{background:#fff;border:1px solid #dad4cb;padding:14px;border-radius:15px}
+.flow-chip b{display:block;font-family:Georgia,serif;font-size:25px}
+.flow-job{background:#fff;border:1px solid #d9d5cc;border-radius:20px;padding:19px;margin:12px 0}
+.flow-jobhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.flow-job h3{font-family:Georgia,serif;font-size:23px;margin:2px 0 7px}
+.flow-score{border-radius:50px;background:#d9f8eb;border:2px solid #151515;padding:9px 12px;font-weight:900;white-space:nowrap}
+.flow-tag{display:inline-block;background:#f4ede2;padding:6px 8px;border-radius:30px;font-size:12px;font-weight:800;margin:4px 4px 0 0}
+.flow-tag.warm{background:#ffe0d7}.flow-tag.good{background:#d5f7ed}
+.flow-outcome{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.85fr);gap:20px}
+.flow-rail{background:#ffe5dc;border:1px solid #151515;border-radius:22px;padding:20px;align-self:start}
+.flow-muted{color:#626b67}
+.flow-rule{height:1px;background:#d8d3c8;margin:18px 0}
+.flow-ready-meter{height:15px;border:2px solid #151515;border-radius:30px;background:#fff;overflow:hidden;margin-top:10px}.flow-ready-meter span{display:block;height:100%;background:#46e0c6}
+.flow-preview{background:#fff;border:1px solid #d7d3cc;border-radius:14px;padding:22px;white-space:pre-wrap;font-size:13px;line-height:1.55;max-height:400px;overflow:auto}
+.flow-links{display:flex;gap:10px;flex-wrap:wrap}
+.flow-alert{padding:13px 15px;background:#fff1bc;border-radius:12px;border:1px solid #d2a400;font-size:13px;line-height:1.5}
+.flow-warning{padding:10px 12px;border-radius:12px;background:#fee8de;color:#6b2620;margin-top:8px;font-size:13px}
+@media(max-width:700px){.flow-backdrop{padding:0}.flow-shell{min-height:100vh;border:0;border-radius:0;box-shadow:none}.flow-top{padding:12px 17px}.flow-body{padding:22px 18px 50px}.flow-layout,.flow-outcome{grid-template-columns:1fr}.flow-art{min-height:180px;order:-1}.flow-art .flow-monster{font-size:85px}.flow-review{grid-template-columns:1fr 1fr}.flow-answer{grid-template-columns:1fr 1fr}.flow-h1{font-size:42px}}
